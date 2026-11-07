@@ -1,0 +1,45 @@
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+.mvn/wrapper/maven-wrapper.jar
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+application-local.properties
+application-secret.properties
+secrets/
+*.pem
+*.key
+*.p12
+*.jks
+serviceAccountKey.json
+firebase-adminsdk-*.json
+
+# Frontend / Node
+node_modules/
+dist/
+build/
+.next/
+coverage/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Operating system
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Local databases and backups
+*.sql
+*.dump
+*.bak

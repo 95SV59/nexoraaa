@@ -1,0 +1,416 @@
+{
+  "info": {
+    "name": "NEXORA REST & Real-Time API",
+    "_postman_id": "c1f798e4-7d52-472d-8692-26154b7c8449",
+    "description": "Comprehensive API collection for NEXORA — Full-Stack Multiplayer Gaming Platform with Predictive What-If Network Control.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register Player",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testplayer\",\n  \"email\": \"testplayer@nexora.com\",\n  \"password\": \"player123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Login (Sets JWT)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "  pm.environment.set(\"jwt\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Profile",
+      "item": [
+        {
+          "name": "Get Current Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/users/profile", "host": ["{{baseUrl}}"], "path": ["users", "profile"] }
+          }
+        },
+        {
+          "name": "Get Public Profile",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/users/admin", "host": ["{{baseUrl}}"], "path": ["users", "admin"] }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"avatarUrl\": \"https://api.dicebear.com/7.x/bottts/svg?seed=nexora\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/users/profile", "host": ["{{baseUrl}}"], "path": ["users", "profile"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Catalogue & Games",
+      "item": [
+        {
+          "name": "Search / Browse Games",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/games?search=&page=0&size=10", "host": ["{{baseUrl}}"], "path": ["games"] }
+          }
+        },
+        {
+          "name": "Get Game Details",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/games/arena", "host": ["{{baseUrl}}"], "path": ["games", "arena"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews & Community",
+      "item": [
+        {
+          "name": "Get Game Reviews",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/games/arena/reviews", "host": ["{{baseUrl}}"], "path": ["games", "arena", "reviews"] }
+          }
+        },
+        {
+          "name": "Post Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"body\": \"Incredible predictive network adaptation during high jitter sessions!\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/games/arena/reviews", "host": ["{{baseUrl}}"], "path": ["games", "arena", "reviews"] }
+          }
+        },
+        {
+          "name": "Toggle Like Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/reviews/1/like", "host": ["{{baseUrl}}"], "path": ["reviews", "1", "like"] }
+          }
+        },
+        {
+          "name": "Report Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/reviews/1/report", "host": ["{{baseUrl}}"], "path": ["reviews", "1", "report"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Wishlist",
+      "item": [
+        {
+          "name": "Get My Wishlist",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/wishlist", "host": ["{{baseUrl}}"], "path": ["wishlist"] }
+          }
+        },
+        {
+          "name": "Add to Wishlist",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/wishlist/arena", "host": ["{{baseUrl}}"], "path": ["wishlist", "arena"] }
+          }
+        },
+        {
+          "name": "Check Wishlist",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/wishlist/arena/check", "host": ["{{baseUrl}}"], "path": ["wishlist", "arena", "check"] }
+          }
+        },
+        {
+          "name": "Remove from Wishlist",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/wishlist/arena", "host": ["{{baseUrl}}"], "path": ["wishlist", "arena"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Library",
+      "item": [
+        {
+          "name": "Get My Library",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/library", "host": ["{{baseUrl}}"], "path": ["library"] }
+          }
+        },
+        {
+          "name": "Set Game Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PLAYING\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/library/arena", "host": ["{{baseUrl}}"], "path": ["library", "arena"] }
+          }
+        },
+        {
+          "name": "Get Library Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/library/stats", "host": ["{{baseUrl}}"], "path": ["library", "stats"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Articles & News",
+      "item": [
+        {
+          "name": "List Published Articles",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/articles", "host": ["{{baseUrl}}"], "path": ["articles"] }
+          }
+        },
+        {
+          "name": "Get Article Details",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/articles/1", "host": ["{{baseUrl}}"], "path": ["articles", "1"] }
+          }
+        },
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/articles/categories", "host": ["{{baseUrl}}"], "path": ["articles", "categories"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Recommendations",
+      "item": [
+        {
+          "name": "Get Rule-Based Recommendations",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/recommendations", "host": ["{{baseUrl}}"], "path": ["recommendations"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Multiplayer Rooms",
+      "item": [
+        {
+          "name": "Create Room",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"gameId\": \"arena\",\n  \"maxPlayers\": 8,\n  \"controllerMode\": \"PROPOSED\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/rooms", "host": ["{{baseUrl}}"], "path": ["rooms"] }
+          }
+        },
+        {
+          "name": "Join Room",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomCode\": \"XXXX\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/rooms/join", "host": ["{{baseUrl}}"], "path": ["rooms", "join"] }
+          }
+        },
+        {
+          "name": "Get Room",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/rooms/XXXX", "host": ["{{baseUrl}}"], "path": ["rooms", "XXXX"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Network Lab & Experiments",
+      "item": [
+        {
+          "name": "Set Lab Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profileName\": \"POOR\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/network-lab/XXXX/profile", "host": ["{{baseUrl}}"], "path": ["network-lab", "XXXX", "profile"] }
+          }
+        },
+        {
+          "name": "Compare Baseline vs Proposed",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/network/experiments/compare?baselineSessionId=1&proposedSessionId=2", "host": ["{{baseUrl}}"], "path": ["network", "experiments", "compare"] }
+          }
+        },
+        {
+          "name": "List Telemetry Sessions",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/network/experiments/sessions", "host": ["{{baseUrl}}"], "path": ["network", "experiments", "sessions"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin Management",
+      "item": [
+        {
+          "name": "Get System Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/admin/stats", "host": ["{{baseUrl}}"], "path": ["admin", "stats"] }
+          }
+        },
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/admin/users", "host": ["{{baseUrl}}"], "path": ["admin", "users"] }
+          }
+        },
+        {
+          "name": "Toggle User Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/admin/users/1/status", "host": ["{{baseUrl}}"], "path": ["admin", "users", "1", "status"] }
+          }
+        },
+        {
+          "name": "Get Reported Reviews",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/admin/reviews/reported", "host": ["{{baseUrl}}"], "path": ["admin", "reviews", "reported"] }
+          }
+        }
+      ]
+    }
+  ]
+}

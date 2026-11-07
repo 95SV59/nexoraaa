@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: nexora-backend
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/nexora?useSSL=false&serverTimezone=UTC}
+    username: ${DB_USERNAME:nexora}
+    password: ${DB_PASSWORD:nexora}
+  jpa:
+    open-in-view: true
+    hibernate:
+      # database/schema.sql is the source of truth and was aligned to the entities by hand
+      # (slug game_id, DOUBLE metrics, LONGTEXT for @Lob JSON, no FKs to tables nothing
+      # populates yet). It has not been run against a live MySQL from this environment, so
+      # "validate" is off rather than risk a startup failure on a type-code nuance
+      # (e.g. Instant vs DATETIME, BOOLEAN vs TINYINT(1)). Flip to `validate` once you've
+      # confirmed the schema loads and the app boots against your database.
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: ${FLYWAY_ENABLED:false}
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+server:
+  port: 8080
+
+nexora:
+  network-controller:
+    confidence-threshold: 0.80
+  security:
+    # Local-dev placeholder only — MUST be overridden via env var for anything real. HS256
+    # requires at least 32 bytes; this is 44 bytes of base64-decoded-looking filler so it's
+    # obviously not meant to be a real secret rather than looking like a forgotten real one.
+    jwt-secret: ${JWT_SECRET:nexora-dev-only-secret-change-me-before-deploying-anywhere}
+    jwt-expiration-ms: 86400000  # 24h
+    cors-allowed-origin: ${FRONTEND_ORIGIN:http://localhost:5173}
